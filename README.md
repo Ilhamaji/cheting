@@ -2,7 +2,7 @@
 
 # Chetting
 
-Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun dengan Next.js 15, Prisma, dan NextAuth.
+A **real-time** full-stack chat app — direct messages, groups, and voice channels. Built with Next.js 15, Prisma, and NextAuth.
 
 [![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org)
@@ -11,58 +11,60 @@ Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun
 
 **Demo:** [chetting-xi.vercel.app](https://chetting-xi.vercel.app)
 
+**English** · [Bahasa Indonesia](README.id.md)
+
 </div>
 
 ---
 
-## Tentang
+## About
 
-Chetting adalah aplikasi chat ala Discord/Slack: percakapan pribadi, grup dengan kategori dan channel, sistem pertemanan, serta **voice channel** berbasis WebRTC. Dibangun sebagai project portfolio sekaligus eksplorasi arsitektur real-time di Next.js App Router.
+Chetting follows the Discord/Slack model: private conversations, groups that contain categories and channels, a friend system, and **WebRTC voice channels**. It started as a portfolio project and as an exploration of real-time architecture on the Next.js App Router.
 
-## Fitur
+## Features
 
-### Chat & Sosial
+### Chat and social
 
-- Register/login lewat NextAuth; password di-hash dengan `bcryptjs`.
-- DM satu-lawan-satu, plus grup yang punya **kategori** dan **channel** di dalamnya.
-- Tambah teman lewat email, dan status online/offline yang di-update real-time.
-- Profil dengan avatar dan display name yang bisa diubah.
+- Register/login through NextAuth, with passwords hashed by `bcryptjs`.
+- One-to-one direct messages, plus groups that hold **categories** and **channels**.
+- Add friends by email, and online/offline status that updates in real time.
+- Profiles with editable avatar and display name.
 
-### Media & Voice
+### Media and voice
 
-- Upload file lewat `/api/upload`, disajikan kembali dari `/api/media/[id]`. Gambar dikompresi di klien sebelum dikirim.
-- **Voice channel** memakai WebRTC: signalling di `/api/channels/[id]/voice-signals`, daftar anggota di `voice-members`.
-- Efek suara saat pesan masuk.
+- Files upload through `/api/upload` and are served back from `/api/media/[id]`. Images are compressed client-side before sending.
+- **Voice channels** run on WebRTC: signalling at `/api/channels/[id]/voice-signals`, participant list at `voice-members`.
+- A sound effect plays when a message arrives.
 
 ### UI
 
-- Komponen dari Shadcn UI + Radix UI (focus trap dan keyboard nav ditangani Radix).
-- Transisi antar-halaman dengan Framer Motion.
-- Dark mode dan toast notification.
+- Shadcn UI and Radix UI components (Radix handles focus traps and keyboard navigation).
+- Page transitions with Framer Motion.
+- Dark mode and toast notifications.
 
 ## Tech Stack
 
-| Bagian | Teknologi |
+| Layer | Technology |
 | --- | --- |
 | Framework | Next.js 15 (App Router) |
-| Bahasa | TypeScript |
+| Language | TypeScript |
 | Database | PostgreSQL + Prisma ORM |
 | Auth | NextAuth.js (Prisma adapter) |
 | UI | Shadcn UI + Radix UI |
 | Styling | Tailwind CSS |
-| Animasi | Framer Motion |
+| Animation | Framer Motion |
 | Voice | WebRTC signalling |
-| Validasi | Zod + React Hook Form |
+| Validation | Zod + React Hook Form |
 
-## Menjalankan
+## Getting Started
 
-### 1. Prasyarat
+### 1. Prerequisites
 
 - Node.js 18+
-- Database PostgreSQL
+- A PostgreSQL database
 - npm
 
-### 2. Clone & install
+### 2. Clone and install
 
 ```bash
 git clone https://github.com/Ilhamaji/chetting.git
@@ -78,14 +80,14 @@ NEXTAUTH_SECRET="generate-with: openssl rand -base64 32"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
-### 4. Setup database
+### 4. Set up the database
 
 ```bash
-npm run db:push       # sinkronkan schema Prisma
-npm run db:studio     # (opsional) buka Prisma Studio
+npm run db:push       # sync the Prisma schema
+npm run db:studio     # (optional) open Prisma Studio
 ```
 
-### 5. Jalankan
+### 5. Run
 
 ```bash
 npm run dev
@@ -93,50 +95,50 @@ npm run dev
 
 ## Scripts
 
-| Command | Kegunaan |
+| Command | Purpose |
 | --- | --- |
 | `npm run dev` | Development server |
-| `npm run build` | Prisma generate + build produksi |
-| `npm start` | Jalankan hasil build |
+| `npm run build` | Prisma generate + production build |
+| `npm start` | Serve the production build |
 | `npm run lint` | ESLint |
-| `npm run db:push` | Sinkronkan schema ke database |
+| `npm run db:push` | Sync the schema to the database |
 | `npm run db:studio` | Prisma Studio |
 
-## Struktur
+## Project Layout
 
 ```
 app/api/auth/[...nextauth]/           # NextAuth handler
-app/api/auth/register/                # registrasi manual
-app/api/messages/                     # kirim & ambil pesan
-app/api/friends/                      # sistem pertemanan
-app/api/groups/                       # grup, kategori, channel, anggota
-app/api/channels/[id]/voice-signals/  # signalling WebRTC
-app/api/channels/[id]/voice-members/  # daftar anggota voice
-app/api/media/[id]/                   # penyajian media
-app/api/upload/                       # unggah file
-app/api/users/profile/                # profil pengguna
-app/api/users/status/                 # status online
+app/api/auth/register/                # manual registration
+app/api/messages/                     # send and fetch messages
+app/api/friends/                      # friend system
+app/api/groups/                       # groups, categories, channels, members
+app/api/channels/[id]/voice-signals/  # WebRTC signalling
+app/api/channels/[id]/voice-members/  # voice participant list
+app/api/media/[id]/                   # media serving
+app/api/upload/                       # file upload
+app/api/users/profile/                # user profile
+app/api/users/status/                 # online status
 
 components/
-  chat/chat-sidebar.tsx               # daftar channel & DM
-  chat/chat-window.tsx                # area pesan
-  chat/voice-room.tsx                 # UI voice channel (WebRTC)
+  chat/chat-sidebar.tsx               # channel and DM list
+  chat/chat-window.tsx                # message area
+  chat/voice-room.tsx                 # voice channel UI (WebRTC)
   chat/user-avatar.tsx
   providers/session-provider.tsx      # NextAuth session
   providers/theme-provider.tsx
-  ui/                                 # komponen Shadcn (avatar, dialog, ...)
+  ui/                                 # Shadcn components (avatar, dialog, ...)
 
 lib/
-  auth.ts                             # konfigurasi NextAuth + bcryptjs
+  auth.ts                             # NextAuth config + bcryptjs
   prisma.ts                           # Prisma client singleton
-  socket.ts                           # koneksi realtime
-  security.ts                         # helper keamanan
-  compress-image.ts                   # kompresi gambar sisi klien
-  sound.ts                            # efek suara pesan masuk
+  socket.ts                           # realtime connection
+  security.ts                         # security helpers
+  compress-image.ts                   # client-side image compression
+  sound.ts                            # incoming-message sound
 ```
 
 ---
 
 <div align="center">
-Dibuat oleh <a href="https://github.com/Ilhamaji">Ilham Aji</a>
+Built by <a href="https://github.com/Ilhamaji">Ilham Aji</a>
 </div>
