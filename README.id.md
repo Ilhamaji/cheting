@@ -1,6 +1,6 @@
 <div align="center">
 
-# Chetting
+# Cheting
 
 Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun dengan Next.js 15, Prisma, dan NextAuth.
 
@@ -9,7 +9,7 @@ Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io)
 
-**Demo:** [chetting-xi.vercel.app](https://chetting-xi.vercel.app)
+**Demo:** [cheting.vercel.app](https://cheting.vercel.app)
 
 <!-- lang-switcher -->
 [English](README.md) · **Bahasa Indonesia**
@@ -20,7 +20,7 @@ Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun
 
 ## Tentang
 
-Chetting adalah aplikasi chat ala Discord/Slack: percakapan pribadi, grup dengan kategori dan channel, sistem pertemanan, serta **voice channel** berbasis WebRTC. Dibangun sebagai project portfolio sekaligus eksplorasi arsitektur real-time di Next.js App Router.
+Cheting adalah aplikasi chat ala Discord/Slack: percakapan pribadi, grup dengan kategori dan channel, sistem pertemanan, serta **voice channel** berbasis WebRTC. Dibangun sebagai project portfolio sekaligus eksplorasi arsitektur real-time di Next.js App Router.
 
 ## Fitur
 
@@ -68,15 +68,15 @@ Chetting adalah aplikasi chat ala Discord/Slack: percakapan pribadi, grup dengan
 ### 2. Clone & install
 
 ```bash
-git clone https://github.com/Ilhamaji/chetting.git
-cd chetting
+git clone https://github.com/Ilhamaji/cheting.git
+cd cheting
 npm install
 ```
 
 ### 3. Environment
 
 ```env
-DATABASE_URL="postgresql://user:pass@localhost:5432/chetting"
+DATABASE_URL="postgresql://user:pass@localhost:5432/cheting"
 NEXTAUTH_SECRET="generate-with: openssl rand -base64 32"
 NEXTAUTH_URL="http://localhost:3000"
 ```
