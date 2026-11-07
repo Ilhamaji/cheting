@@ -1,224 +1,142 @@
-# ChatApp - Real-time Chat Application
+<div align="center">
 
-Modern, full-stack chat application built with Next.js 15, Prisma, Socket.io, and Shadcn UI.
+# Chetting
 
-## Features
+Aplikasi chat full-stack **real-time** — DM, grup, dan voice channel. Dibangun dengan Next.js 15, Prisma, dan NextAuth.
 
-- 🔐 **Authentication** - Secure register/login with NextAuth.js
-- 💬 **Private Chat** - One-on-one messaging with friends
-- 👥 **Group Chat** - Create and manage group conversations
-- 👤 **User Profiles** - Customizable avatars and display names
-- ➕ **Friend System** - Add friends by email
-- 🎨 **Modern UI** - Beautiful interface with Framer Motion animations
-- ⚡ **Real-time** - Instant message delivery (Socket.io ready)
-- 📱 **Responsive** - Works on desktop and mobile
+[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](#)
+[![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io)
+
+**Demo:** [chetting-xi.vercel.app](https://chetting-xi.vercel.app)
+
+</div>
+
+---
+
+## Tentang
+
+Chetting adalah aplikasi chat ala Discord/Slack: percakapan pribadi, grup dengan kategori dan channel, sistem pertemanan, serta **voice channel** berbasis WebRTC. Dibangun sebagai project portfolio sekaligus eksplorasi arsitektur real-time di Next.js App Router.
+
+## Fitur
+
+### Chat & Sosial
+
+- Register/login lewat NextAuth; password di-hash dengan `bcryptjs`.
+- DM satu-lawan-satu, plus grup yang punya **kategori** dan **channel** di dalamnya.
+- Tambah teman lewat email, dan status online/offline yang di-update real-time.
+- Profil dengan avatar dan display name yang bisa diubah.
+
+### Media & Voice
+
+- Upload file lewat `/api/upload`, disajikan kembali dari `/api/media/[id]`. Gambar dikompresi di klien sebelum dikirim.
+- **Voice channel** memakai WebRTC: signalling di `/api/channels/[id]/voice-signals`, daftar anggota di `voice-members`.
+- Efek suara saat pesan masuk.
+
+### UI
+
+- Komponen dari Shadcn UI + Radix UI (focus trap dan keyboard nav ditangani Radix).
+- Transisi antar-halaman dengan Framer Motion.
+- Dark mode dan toast notification.
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
-- **UI Components**: Shadcn UI + Radix UI
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Real-time**: Socket.io (ready to integrate)
-- **Type Safety**: TypeScript
+| Bagian | Teknologi |
+| --- | --- |
+| Framework | Next.js 15 (App Router) |
+| Bahasa | TypeScript |
+| Database | PostgreSQL + Prisma ORM |
+| Auth | NextAuth.js (Prisma adapter) |
+| UI | Shadcn UI + Radix UI |
+| Styling | Tailwind CSS |
+| Animasi | Framer Motion |
+| Voice | WebRTC signalling |
+| Validasi | Zod + React Hook Form |
 
-## Prerequisites
+## Menjalankan
+
+### 1. Prasyarat
 
 - Node.js 18+
-- PostgreSQL database
-- npm or pnpm
+- Database PostgreSQL
+- npm
 
-## Getting Started
-
-### 1. Clone and Install
+### 2. Clone & install
 
 ```bash
+git clone https://github.com/Ilhamaji/chetting.git
+cd chetting
 npm install
 ```
 
-### 2. Database Setup
-
-Create a PostgreSQL database and copy the environment variables:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and set your database URL:
+### 3. Environment
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/chatapp"
+DATABASE_URL="postgresql://user:pass@localhost:5432/chetting"
+NEXTAUTH_SECRET="generate-with: openssl rand -base64 32"
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key-here"
 ```
 
-Generate a secure NextAuth secret:
+### 4. Setup database
 
 ```bash
-openssl rand -base64 32
+npm run db:push       # sinkronkan schema Prisma
+npm run db:studio     # (opsional) buka Prisma Studio
 ```
 
-### 3. Initialize Database
-
-```bash
-npm run db:generate
-npm run db:push
-```
-
-### 4. Run Development Server
+### 5. Jalankan
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Scripts
 
-## Project Structure
+| Command | Kegunaan |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` | Prisma generate + build produksi |
+| `npm start` | Jalankan hasil build |
+| `npm run lint` | ESLint |
+| `npm run db:push` | Sinkronkan schema ke database |
+| `npm run db:studio` | Prisma Studio |
+
+## Struktur
 
 ```
-├── app/
-│   ├── api/              # API routes
-│   │   ├── auth/         # Authentication endpoints
-│   │   ├── friends/      # Friend management
-│   │   ├── groups/       # Group management
-│   │   └── messages/     # Message endpoints
-│   ├── auth/             # Auth pages
-│   ├── chat/             # Main chat interface
-│   └── layout.tsx
-├── components/
-│   ├── chat/             # Chat components
-│   │   ├── chat-sidebar.tsx
-│   │   ├── chat-window.tsx
-│   │   └── user-avatar.tsx
-│   └── ui/               # Shadcn UI components
-├── lib/
-│   ├── auth.ts           # NextAuth configuration
-│   ├── prisma.ts         # Prisma client
-│   ├── socket.ts         # Socket.io client
-│   └── utils.ts          # Utilities
-├── prisma/
-│   └── schema.prisma     # Database schema
-└── types/                # TypeScript definitions
+app/api/auth/[...nextauth]/           # NextAuth handler
+app/api/auth/register/                # registrasi manual
+app/api/messages/                     # kirim & ambil pesan
+app/api/friends/                      # sistem pertemanan
+app/api/groups/                       # grup, kategori, channel, anggota
+app/api/channels/[id]/voice-signals/  # signalling WebRTC
+app/api/channels/[id]/voice-members/  # daftar anggota voice
+app/api/media/[id]/                   # penyajian media
+app/api/upload/                       # unggah file
+app/api/users/profile/                # profil pengguna
+app/api/users/status/                 # status online
+
+components/
+  chat/chat-sidebar.tsx               # daftar channel & DM
+  chat/chat-window.tsx                # area pesan
+  chat/voice-room.tsx                 # UI voice channel (WebRTC)
+  chat/user-avatar.tsx
+  providers/session-provider.tsx      # NextAuth session
+  providers/theme-provider.tsx
+  ui/                                 # komponen Shadcn (avatar, dialog, ...)
+
+lib/
+  auth.ts                             # konfigurasi NextAuth + bcryptjs
+  prisma.ts                           # Prisma client singleton
+  socket.ts                           # koneksi realtime
+  security.ts                         # helper keamanan
+  compress-image.ts                   # kompresi gambar sisi klien
+  sound.ts                            # efek suara pesan masuk
 ```
 
-## Database Schema
+---
 
-- **User** - User accounts with authentication
-- **Friendship** - Friend relationships between users
-- **Group** - Group chat rooms
-- **GroupMember** - Group membership with roles (Admin/Member)
-- **Message** - Chat messages (private & group)
-
-## Features Detail
-
-### Authentication
-- Email/password registration
-- Secure password hashing with bcrypt
-- JWT-based session management
-
-### Private Chat
-- Direct messaging between friends
-- Message history
-- Real-time delivery (Socket.io ready)
-- Read receipts
-
-### Group Chat
-- Create groups with custom names and descriptions
-- Admin controls (rename group, manage members)
-- Multiple members support
-- Group avatars
-
-### Friend System
-- Add friends by email
-- Friend list management
-- Online/offline status (ready to implement)
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/[...nextauth]` - NextAuth endpoints
-
-### Friends
-- `GET /api/friends` - Get friend list
-- `POST /api/friends` - Add friend by email
-
-### Groups
-- `GET /api/groups` - Get user's groups
-- `POST /api/groups` - Create new group
-- `PATCH /api/groups/[id]` - Update group (admin only)
-
-### Messages
-- `GET /api/messages` - Get messages (private or group)
-- `POST /api/messages` - Send message
-
-## Customization
-
-### Styling
-Edit `app/globals.css` for global styles and Tailwind configuration.
-
-### Colors
-The app uses a blue-purple gradient theme. Modify in components:
-```tsx
-className="bg-gradient-to-r from-blue-600 to-purple-600"
-```
-
-### Database
-To modify the schema, edit `prisma/schema.prisma` and run:
-```bash
-npm run db:push
-```
-
-## Production Deployment
-
-### 1. Build the application
-```bash
-npm run build
-```
-
-### 2. Set environment variables
-- `DATABASE_URL` - Production database URL
-- `NEXTAUTH_URL` - Production domain
-- `NEXTAUTH_SECRET` - Strong secret key
-
-### 3. Deploy
-Deploy to Vercel, Railway, or any Node.js hosting platform.
-
-## Real-time Implementation
-
-Socket.io client is ready in `lib/socket.ts`. To enable real-time:
-
-1. Create a Socket.io server (separate or in Next.js API route)
-2. Emit `new-message` events on message send
-3. Listen for incoming messages in ChatWindow component
-
-Example:
-```tsx
-useEffect(() => {
-  socket.on('new-message', (message) => {
-    setMessages(prev => [...prev, message])
-  })
-}, [])
-```
-
-## Troubleshooting
-
-### Database Connection Error
-- Verify PostgreSQL is running
-- Check DATABASE_URL in `.env`
-- Ensure database exists
-
-### Authentication Error
-- Verify NEXTAUTH_SECRET is set
-- Clear browser cookies
-- Check NEXTAUTH_URL matches your domain
-
-## License
-
-MIT
-
-## Support
-
-For issues and questions, please open an issue on GitHub.
+<div align="center">
+Dibuat oleh <a href="https://github.com/Ilhamaji">Ilham Aji</a>
+</div>
